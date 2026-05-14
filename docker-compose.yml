@@ -4,4 +4,9 @@ services:
     container_name: norview
     ports:
       - "3000:3000"
+    volumes:
+      - norview-data:/app/data
     restart: unless-stopped
+
+volumes:
+  norview-data:
