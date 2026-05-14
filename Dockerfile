@@ -11,8 +11,8 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 # Install server dependencies
-COPY server/package.json server/package-lock.json ./server/
-RUN cd server && npm ci
+COPY server/package.json ./server/
+RUN cd server && npm install
 
 # Copy source and build
 COPY . .
@@ -27,8 +27,8 @@ RUN apk add --no-cache python3 make g++
 WORKDIR /app
 
 # Install only production deps for the server
-COPY server/package.json server/package-lock.json ./server/
-RUN cd server && npm ci --omit=dev
+COPY server/package.json ./server/
+RUN cd server && npm install --omit=dev
 
 # Copy built frontend + server code + production serve script
 COPY --from=build /app/dist ./dist
