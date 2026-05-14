@@ -24,11 +24,10 @@ WORKDIR /app
 COPY server/package.json server/package-lock.json ./server/
 RUN cd server && npm ci --omit=dev
 
-# Copy built frontend + server code
+# Copy built frontend + server code + production serve script
 COPY --from=build /app/dist ./dist
 COPY server/index.js ./server/
-
-# Lightweight static file server that also proxies /api
+COPY docker-serve.js ./docker-serve.js
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
