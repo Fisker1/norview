@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import { startRecording, queryHistory, getTimestamps } from './recorder.js';
 
 const app = express();
 const PORT = 3001;
@@ -72,6 +73,33 @@ app.get('/api/satellites/weather', cached('satellites-weather', 3600000, async (
   return await resp.json();
 }));
 
+// ---- History API endpoints ----
+
+// Get historical snapshots for a data type
+app.get('/api/history', (req, res) => {
+  const { type, from, to } = req.query;
+  if (!type || !from || !to) {
+    return res.status(400).json({ error: 'Required: type, from, to (ISO timestamps)' });
+  }
+  try {
+    const data = queryHistory(type, from, to);
+    res.json(data);
+  } catch (err) {
+    console.error('[HISTORY] Query error:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get available snapshot timestamps
+app.get('/api/history/timestamps', (req, res) => {
+  try {
+    const timestamps = getTimestamps();
+    res.json({ timestamps, count: timestamps.length });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({
@@ -84,9 +112,27 @@ app.get('/api/health', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`
-╔══════════════════════════════════════════╗
-║    NORVIEW API Server — Port ${PORT}        ║
-║    Arctic OSINT Command Center           ║
-╚══════════════════════════════════════════╝
+\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557
+\u2551 NORVIEW API Server \u2014 Port ${PORT}            \u2551
+\u2551 Arctic OSINT Command Center                \u2551
+\u255A\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255D
   `);
+
+  // Start recording snapshots for timeline history
+  startRecording(
+    // Fetch flights (Norway region)
+    async () => {
+      const url = 'https://opensky-network.org/api/states/all?lamin=57.5&lomin=-5&lamax=81&lomax=40';
+      const resp = await fetch(url);
+      if (!resp.ok) return null;
+      return await resp.json();
+    },
+    // Fetch military satellites
+    async () => {
+      const url = 'https://celestrak.org/NORAD/elements/gp.php?GROUP=military&FORMAT=json';
+      const resp = await fetch(url);
+      if (!resp.ok) return null;
+      return await resp.json();
+    }
+  );
 });
