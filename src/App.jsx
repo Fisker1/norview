@@ -7,6 +7,7 @@ import EntityPanel from './components/EntityPanel';
 import AlertFeed from './components/AlertFeed';
 import Timeline from './components/Timeline';
 import Onboarding from './components/Onboarding';
+import ThreatPanel from './components/ThreatPanel';
 import FlightLayer from './layers/FlightLayer';
 import VesselLayer from './layers/VesselLayer';
 import SatelliteLayer from './layers/SatelliteLayer';
@@ -71,6 +72,7 @@ export default function App() {
       <Sidebar />
       <StatusBar />
       <Timeline />
+      <ThreatPanel />
       {alerts.length > 0 && !selectedEntity && <AlertFeed />}
       {selectedEntity && <EntityPanel />}
 
