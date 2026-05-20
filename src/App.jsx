@@ -10,6 +10,7 @@ import Onboarding from './components/Onboarding';
 import ThreatPanel from './components/ThreatPanel';
 import CorrelationPanel from './components/CorrelationPanel';
 import TimelineScrubber from './components/TimelineScrubber';
+import IntelFeed from './components/IntelFeed';
 import FlightLayer from './layers/FlightLayer';
 import VesselLayer from './layers/VesselLayer';
 import SatelliteLayer from './layers/SatelliteLayer';
@@ -77,6 +78,7 @@ export default function App() {
       <ThreatPanel />
       <CorrelationPanel />
       <TimelineScrubber />
+      <IntelFeed />
       {alerts.length > 0 && !selectedEntity && <AlertFeed />}
       {selectedEntity && <EntityPanel />}
 
@@ -84,4 +86,4 @@ export default function App() {
       {showOnboarding && <Onboarding onClose={handleCloseOnboarding} />}
     </div>
   );
-      }
+}
