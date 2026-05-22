@@ -11,6 +11,7 @@ import ThreatPanel from './components/ThreatPanel';
 import CorrelationPanel from './components/CorrelationPanel';
 import TimelineScrubber from './components/TimelineScrubber';
 import IntelFeed from './components/IntelFeed';
+import PanopticOverlay from './components/PanopticOverlay';
 import FlightLayer from './layers/FlightLayer';
 import VesselLayer from './layers/VesselLayer';
 import SatelliteLayer from './layers/SatelliteLayer';
@@ -20,11 +21,10 @@ import useStore from './store';
 
 export default function App() {
   const [viewer, setViewer] = useState(null);
-  const layers = useStore((s) => s.layers);
-  const selectedEntity = useStore((s) => s.selectedEntity);
   const alerts = useStore((s) => s.alerts);
+  const selectedEntity = useStore((s) => s.selectedEntity);
+  const visualFilter = useStore((s) => s.visualFilter);
 
-  // Show onboarding on first visit (or when help button clicked)
   const [showOnboarding, setShowOnboarding] = useState(() => {
     try {
       return !window.sessionStorage.getItem('norview-onboarded');
@@ -42,7 +42,6 @@ export default function App() {
     setShowOnboarding(true);
   }, []);
 
-  // ESC key closes onboarding
   useEffect(() => {
     const handler = (e) => {
       if (e.key === 'Escape' && showOnboarding) handleCloseOnboarding();
@@ -59,18 +58,16 @@ export default function App() {
     <div style={{ width: '100%', height: '100%', position: 'relative', background: '#0a0a0f' }}>
       <GlobeViewer onViewerReady={handleViewerReady} />
 
-      {/* Data layers */}
       {viewer && (
         <>
-          {layers.flights && <FlightLayer viewer={viewer} />}
-          {layers.vessels && <VesselLayer viewer={viewer} />}
-          {layers.satellites && <SatelliteLayer viewer={viewer} />}
-          {layers.gpsJamming && <GpsJammingLayer viewer={viewer} />}
-          {layers.airspaces && <AirspaceLayer viewer={viewer} />}
+          <FlightLayer viewer={viewer} />
+          <VesselLayer viewer={viewer} />
+          <SatelliteLayer viewer={viewer} />
+          <GpsJammingLayer viewer={viewer} />
+          <AirspaceLayer viewer={viewer} />
         </>
       )}
 
-      {/* UI Overlay */}
       <Header onHelpClick={handleOpenHelp} />
       <Sidebar />
       <StatusBar />
@@ -79,10 +76,10 @@ export default function App() {
       <CorrelationPanel />
       <TimelineScrubber />
       <IntelFeed />
+      <PanopticOverlay />
       {alerts.length > 0 && !selectedEntity && <AlertFeed />}
       {selectedEntity && <EntityPanel />}
 
-      {/* Onboarding modal */}
       {showOnboarding && <Onboarding onClose={handleCloseOnboarding} />}
     </div>
   );
