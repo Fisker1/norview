@@ -51,6 +51,10 @@ const useStore = create((set, get) => ({
   visualFilter: 'normal',
   setVisualFilter: (f) => set({ visualFilter: f }),
 
+  // Panoptic Mode (GODS EYE / Maven inspired)
+  panopticMode: false,
+  togglePanoptic: () => set((s) => ({ panopticMode: !s.panopticMode })),
+
   // Data caches
   flights: [],
   setFlights: (d) => set({ flights: d }),
