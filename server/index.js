@@ -73,6 +73,30 @@ app.get('/api/satellites/weather', cached('satellites-weather', 3600000, async (
   return await resp.json();
 }));
 
+// Open-Meteo Weather API — real-time weather intelligence (free, no auth)
+// Maven + GODS EYE feature: environmental data fusion for operational awareness
+app.get('/api/weather', cached('weather', 300000, async (req) => {
+  const { latitudes, longitudes } = req.query;
+  if (!latitudes || !longitudes) throw new Error('Required: latitudes, longitudes (comma-separated)');
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitudes}&longitude=${longitudes}&current=temperature_2m,relative_humidity_2m,precipitation,cloud_cover,visibility,wind_speed_10m,wind_direction_10m,wind_gusts_10m&wind_speed_unit=ms`;
+  console.log('[WEATHER] Fetching:', url);
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error(`Open-Meteo returned ${resp.status}`);
+  const raw = await resp.json();
+  // Normalize: Open-Meteo returns array for multi-location or single object
+  const items = Array.isArray(raw) ? raw : [raw];
+  return items.map((r) => ({
+    temperature: r.current?.temperature_2m,
+    humidity: r.current?.relative_humidity_2m,
+    precipitation: r.current?.precipitation,
+    cloudCover: r.current?.cloud_cover,
+    visibility: r.current?.visibility,
+    windSpeed: r.current?.wind_speed_10m,
+    windDirection: r.current?.wind_direction_10m,
+    windGusts: r.current?.wind_gusts_10m,
+  }));
+}));
+
 // ---- History API endpoints ----
 
 // Get historical snapshots for a data type
@@ -112,11 +136,11 @@ app.get('/api/health', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`
-\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557
-\u2551 NORVIEW API Server \u2014 Port ${PORT}            \u2551
-\u2551 Arctic OSINT Command Center                \u2551
-\u255A\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255D
-  `);
+╔══════════════════════════════════════════╗
+║   NORVIEW API Server — Port ${PORT}       ║
+║   Arctic OSINT Command Center            ║
+╚══════════════════════════════════════════╝
+`);
 
   // Start recording snapshots for timeline history
   startRecording(
