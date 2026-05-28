@@ -20,7 +20,7 @@ cd server && node index.js
 npx vite
 ```
 
-Open **http://localhost:3000**
+Open http://localhost:3000
 
 ## Data Layers
 
@@ -29,6 +29,7 @@ Open **http://localhost:3000**
 | Flights | OpenSky Network (live) | Real-time aircraft positions, altitude, speed, heading |
 | Vessels | AIS simulation | Ship positions along Norwegian shipping lanes, dark vessel detection |
 | Satellites | satellite.js + TLE | Orbit propagation, ISS, Sentinel, NOAA, military constellation tracking |
+| Weather | Open-Meteo (live) | Real-time temperature, wind speed/direction, gusts, visibility, precipitation — Maven/GODS EYE environmental intelligence |
 
 ## Visual Modes
 
@@ -39,9 +40,9 @@ Open **http://localhost:3000**
 
 ## Architecture
 
-- **Frontend**: React + CesiumJS 3D globe (via Resium/Vite)
-- **Backend**: Express proxy for CORS + caching of OSINT APIs
-- **State**: Zustand store for layers, filters, entity selection
+- **Frontend:** React + CesiumJS 3D globe (via Resium/Vite)
+- **Backend:** Express proxy for CORS + caching of OSINT APIs
+- **State:** Zustand store for layers, filters, entity selection
 
 ## Coverage Area
 
@@ -53,11 +54,11 @@ Open **http://localhost:3000**
 
 ## Roadmap
 
-- [ ] Real AIS data integration (AISHub / MarineTraffic)
-- [ ] GPS jamming/spoofing overlay
-- [ ] NOTAM / restricted airspace zones
-- [ ] 4D timeline scrubber (replay events)
-- [ ] Military aircraft classification
-- [ ] Live CCTV feed integration
-- [ ] Dark vessel anomaly detection AI
-- [ ] Satellite imagery layer (Sentinel Hub)
+- Real AIS data integration (AISHub / MarineTraffic)
+- GPS jamming/spoofing overlay
+- NOTAM / restricted airspace zones
+- 4D timeline scrubber (replay events)
+- Military aircraft classification
+- Live CCTV feed integration
+- Dark vessel anomaly detection AI
+- Satellite imagery layer (Sentinel Hub)
