@@ -20,6 +20,7 @@ import GpsJammingLayer from './layers/GpsJammingLayer';
 import AirspaceLayer from './layers/AirspaceLayer';
 import GeofenceLayer from './layers/GeofenceLayer';
 import WeatherLayer from './layers/WeatherLayer';
+import SignalLayer from './layers/SignalLayer';
 import useStore from './store';
 
 export default function App() {
@@ -70,6 +71,7 @@ export default function App() {
           <AirspaceLayer viewer={viewer} />
           <GeofenceLayer viewer={viewer} />
           <WeatherLayer viewer={viewer} />
+          <SignalLayer viewer={viewer} />
         </>
       )}
 
