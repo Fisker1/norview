@@ -15,6 +15,7 @@ const LAYERS = [
   { key: 'gpsJamming', label: 'GPS JAMMING', icon: '\u{1F4E1}', color: '#ef4444', desc: 'EW Interference' },
   { key: 'geofences', label: 'GEOFENCES', icon: '\u{1F3AF}', color: '#f43f5e', desc: 'AOI Alert Zones' },
   { key: 'weather', label: 'WEATHER', icon: '\u{1F326}', color: '#06b6d4', desc: 'Open-Meteo WX' },
+  { key: 'signals', label: 'SIGINT/EW', icon: '\u{1F4E1}', color: '#6366f1', desc: 'Signal Intelligence' },
 ];
 
 const FILTERS = [
@@ -261,4 +262,4 @@ function ThreatIndicator({ label, level, labels, colors }) {
       </div>
     </div>
   );
-            }
+}
