@@ -2,38 +2,29 @@ import { create } from 'zustand';
 
 export const REGIONS = {
   norway: {
-    key: 'norway',
-    label: 'NORWAY',
-    desc: 'Arctic / High North',
-    bounds: { minLat: 57.5, maxLat: 81.0, minLon: -5.0, maxLon: 45.0 },
-    camera: { lon: 15.0, lat: 65.0, height: 4000000, pitch: -60 },
+    key: 'norway', label: 'NORWAY', desc: 'Arctic / High North',
+    bounds: { minLat: 57.5, maxLat: 81.0, minLon: 5.0, maxLon: 45.0 },
+    camera: { lon: 15.0, lat: 65.0, height: 4000000, pitch: -45 },
   },
   europe: {
-    key: 'europe',
-    label: 'EUROPE',
-    desc: 'NATO / EU Theatre',
+    key: 'europe', label: 'EUROPE', desc: 'NATO / EU Theatre',
     bounds: { minLat: 34.0, maxLat: 72.0, minLon: -15.0, maxLon: 45.0 },
-    camera: { lon: 15.0, lat: 50.0, height: 8000000, pitch: -50 },
+    camera: { lon: 15.0, lat: 50.0, height: 8000000, pitch: -45 },
   },
   global: {
-    key: 'global',
-    label: 'GLOBAL',
-    desc: 'Worldwide OSINT',
+    key: 'global', label: 'GLOBAL', desc: 'Worldwide OSINT',
     bounds: { minLat: -90.0, maxLat: 90.0, minLon: -180.0, maxLon: 180.0 },
-    camera: { lon: 15.0, lat: 30.0, height: 20000000, pitch: -90 },
+    camera: { lon: 15.0, lat: 30.0, height: 20000000, pitch: -45 },
   },
 };
 
 const useStore = create((set, get) => ({
   // Region
   region: 'norway',
-  setRegion: (r) => {
-    const cfg = REGIONS[r];
+  setRegion: (key) => {
+    const cfg = REGIONS[key];
     if (!cfg) return;
-    set({
-      region: r,
-      bounds: cfg.bounds,
-    });
+    set({ region: key, bounds: cfg.bounds });
   },
 
   // Layer visibility
@@ -45,6 +36,7 @@ const useStore = create((set, get) => ({
     gpsJamming: true,
     geofences: true,
     weather: true,
+    signals: true,
   },
   toggleLayer: (layer) =>
     set((s) => ({ layers: { ...s.layers, [layer]: !s.layers[layer] } })),
@@ -70,15 +62,7 @@ const useStore = create((set, get) => ({
   setSelectedEntity: (e) => set({ selectedEntity: e }),
 
   // Stats
-  stats: {
-    flights: 0,
-    militaryFlights: 0,
-    vessels: 0,
-    darkVessels: 0,
-    vesselAnomalies: 0,
-    satellites: 0,
-    lastUpdate: null,
-  },
+  stats: { flights: 0, militaryFlights: 0, vessels: 0, darkVessels: 0, vesselAnomalies: 0, satellites: 0, lastUpdate: null },
   setStats: (s) => set((prev) => ({ stats: { ...prev.stats, ...s } })),
 
   // Alerts
