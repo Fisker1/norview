@@ -13,6 +13,7 @@ import TimelineScrubber from './components/TimelineScrubber';
 import IntelFeed from './components/IntelFeed';
 import PanopticOverlay from './components/PanopticOverlay';
 import GeofencePanel from './components/GeofencePanel';
+import SearchPanel from './components/SearchPanel';
 import FlightLayer from './layers/FlightLayer';
 import VesselLayer from './layers/VesselLayer';
 import SatelliteLayer from './layers/SatelliteLayer';
@@ -85,6 +86,7 @@ export default function App() {
       <IntelFeed />
       <PanopticOverlay />
       <GeofencePanel />
+      <SearchPanel />
       {alerts.length > 0 && !selectedEntity && <AlertFeed />}
       {selectedEntity && <EntityPanel />}
 
