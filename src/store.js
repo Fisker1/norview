@@ -82,6 +82,17 @@ const useStore = create((set, get) => ({
   geofenceStats: {},
   setGeofenceStats: (stats) => set({ geofenceStats: stats }),
 
+  // Watchlist - Maven Smart System entity pinning
+  watchlist: [],
+  addToWatchlist: (id) =>
+    set((s) => ({
+      watchlist: s.watchlist.includes(id) ? s.watchlist : [...s.watchlist, id],
+    })),
+  removeFromWatchlist: (id) =>
+    set((s) => ({
+      watchlist: s.watchlist.filter((w) => w !== id),
+    })),
+
   // Bounds (initialized to Norway, updated by setRegion)
   bounds: REGIONS.norway.bounds,
 }));
