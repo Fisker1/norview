@@ -37,6 +37,7 @@ const useStore = create((set, get) => ({
     geofences: true,
     weather: true,
     signals: true,
+    heatmap: false,
   },
   toggleLayer: (layer) =>
     set((s) => ({ layers: { ...s.layers, [layer]: !s.layers[layer] } })),
